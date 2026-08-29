@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case — Paraíba Política | Weverton André</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #14171C; --surface: #1B2027; --surface-2: #212832; --line: #2C333E;
+    --text: #EDEFF2; --muted: #8B94A3; --amber: #FFB020; --amber-dim: #7A5A20; --green: #4ADE80;
+    --display: 'Space Grotesk', sans-serif; --body: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    background: var(--bg); color: var(--text); font-family: var(--body); line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width: 1080px; margin:0 auto; padding: 0 28px; }
+
+  nav{ position:sticky; top:0; z-index:50; background: rgba(20,23,28,0.9); backdrop-filter: blur(10px); border-bottom:1px solid var(--line); }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .back{ font-family: var(--mono); font-size:13px; color: var(--muted); display:flex; align-items:center; gap:8px; }
+  .back:hover{ color: var(--amber); }
+  .badge{ font-family: var(--mono); font-size:11px; color: var(--muted); border:1px solid var(--line); padding:5px 10px; border-radius:6px; }
+
+  header{ padding: 56px 0 36px; border-bottom:1px solid var(--line); }
+  .eyebrow{ font-family: var(--mono); font-size:12px; letter-spacing:0.1em; color: var(--amber); text-transform:uppercase; display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .eyebrow::before{ content:''; width:22px; height:1px; background: var(--amber); }
+  h1{ font-family: var(--display); font-weight:700; font-size: clamp(28px,4vw,42px); margin-bottom:16px; }
+  .lead{ color: var(--muted); font-size:16px; max-width:62ch; margin-bottom:22px; }
+  .stack{ display:flex; flex-wrap:wrap; gap:8px; }
+  .stack span{ font-family: var(--mono); font-size:11.5px; background: var(--surface-2); border:1px solid var(--line); padding:5px 10px; border-radius:5px; }
+
+  .note{
+    margin-top:26px; background: var(--surface); border:1px solid var(--amber-dim); border-left:3px solid var(--amber);
+    border-radius:8px; padding:14px 16px; font-size:13.5px; color: var(--muted);
+  }
+  .note b{ color: var(--amber); font-family: var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:6px; }
+
+  section{ padding:48px 0; }
+  .sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:26px; }
+  .sec-head h2{ font-family: var(--display); font-size:20px; font-weight:600; }
+  .sec-head .idx{ font-family: var(--mono); font-size:12px; color: var(--muted); }
+
+  .gallery{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+  .gallery figure.wide{ grid-column: 1 / -1; }
+  @media (max-width:760px){ .gallery{ grid-template-columns:1fr; } }
+  figure{ background: var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  figure img{ width:100%; display:block; cursor: zoom-in; }
+  figcaption{ font-family: var(--mono); font-size:12px; color: var(--muted); padding:12px 16px; border-top:1px solid var(--line); }
+
+  .feature-list{ display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+  @media (max-width:760px){ .feature-list{ grid-template-columns:1fr; } }
+  .feature-list li{ list-style:none; font-size:14px; color: var(--muted); padding:12px 14px; background: var(--surface); border:1px solid var(--line); border-radius:8px; }
+  .feature-list li::before{ content:'▹ '; color: var(--green); }
+
+  footer{ border-top:1px solid var(--line); padding:32px 0; text-align:center; }
+  footer a{ font-family: var(--mono); font-size:13px; color: var(--amber); }
+
+  .lightbox{
+    position:fixed; inset:0; background: rgba(10,12,15,0.92); display:none; align-items:center; justify-content:center;
+    z-index:100; padding:32px; cursor: zoom-out;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:100%; border-radius:8px; border:1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="back" href="portfolio-weverton-andre.html">← Voltar ao portfólio</a>
+    <span class="badge">CASE 01 · FULL-STACK</span>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Projeto pessoal · 2025</div>
+    <h1>Paraíba Política — Sistema de Blog de Notícias</h1>
+    <p class="lead">Plataforma de notícias com foco em política, sociedade e esportes, com painel administrativo pensado para redatores sem nenhum conhecimento técnico conseguirem publicar, editar e organizar matérias sozinhos.</p>
+    <div class="stack">
+      <span>React</span><span>Vite</span><span>Styled-components</span><span>Node.js</span><span>Express</span><span>Multer</span><span>Cheerio</span>
+    </div>
+    <div class="note">
+      <b>Nota sobre este case</b>
+      O código-fonte original não está mais disponível. As telas abaixo são capturas reais do sistema em funcionamento, mantidas como registro do projeto entregue.
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head"><h2>Telas do sistema</h2><div class="idx">05 capturas</div></div>
+    <div class="gallery">
+      <figure class="wide">
+        <img src="assets/paraiba-01-hero.png" alt="Página inicial do Paraíba Política">
+        <figcaption>Página inicial — cabeçalho e destaque visual</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/paraiba-02-home.png" alt="Grade de notícias na home">
+        <figcaption>Home — grade de notícias mais recentes</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/paraiba-03-menu.png" alt="Menu lateral de categorias">
+        <figcaption>Menu lateral — categorias e subcategorias</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/paraiba-04-admin-lista.png" alt="Painel administrativo listando notícias publicadas">
+        <figcaption>Painel admin — listagem, fixar, ocultar e editar matérias</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/paraiba-05-admin-form.png" alt="Formulário de cadastro de notícia simplificada">
+        <figcaption>Painel admin — cadastro de postagem simplificada</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head"><h2>Funcionalidades principais</h2><div class="idx">08 itens</div></div>
+    <ul class="feature-list">
+      <li>Frontend responsivo em React + Vite</li>
+      <li>Painel administrativo para criar, editar e excluir notícias</li>
+      <li>Upload de imagem persistente no servidor (sem depender de blobs temporários)</li>
+      <li>Editor completo com troca de imagem e campos dinâmicos</li>
+      <li>Organização por categorias e subcategorias</li>
+      <li>Login administrativo com autenticação</li>
+      <li>API REST própria em Node.js + Express</li>
+      <li>Persistência local em arquivo JSON</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <a href="portfolio-weverton-andre.html">← Voltar ao portfólio de Weverton André</a>
+</footer>
+
+<div class="lightbox" id="lightbox"><img id="lightbox-img" src="" alt=""></div>
+
+<script>
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('figure img').forEach(img=>{
+    img.addEventListener('click', ()=>{ lbImg.src = img.src; lb.classList.add('open'); });
+  });
+  lb.addEventListener('click', ()=> lb.classList.remove('open'));
+</script>
+
+</body>
+</html>

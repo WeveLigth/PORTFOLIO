@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weverton André — Painel de Dados</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #14171C;
+    --surface: #1B2027;
+    --surface-2: #212832;
+    --line: #2C333E;
+    --text: #EDEFF2;
+    --muted: #8B94A3;
+    --amber: #FFB020;
+    --amber-dim: #7A5A20;
+    --green: #4ADE80;
+    --red: #F2545B;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(255,176,32,0.06), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(74,222,128,0.05), transparent 40%);
+    color: var(--text);
+    font-family: var(--body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; text-decoration: none; }
+
+  ::selection{ background: var(--amber); color:#14171C; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(20,23,28,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand{ font-family: var(--display); font-weight:700; font-size:16px; letter-spacing:0.02em; display:flex; align-items:center; gap:8px;}
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .navlinks{ display:flex; gap:28px; font-size:13px; color: var(--muted); font-family: var(--mono); }
+  .navlinks a:hover{ color: var(--amber); }
+  @media (max-width: 640px){ .navlinks{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  header.hero{ padding: 72px 0 40px; }
+  .eyebrow{
+    font-family: var(--mono); font-size:12px; letter-spacing:0.12em; color: var(--amber);
+    display:flex; align-items:center; gap:10px; margin-bottom:22px; text-transform:uppercase;
+  }
+  .eyebrow::before{ content:''; width:22px; height:1px; background: var(--amber); }
+
+  .hero-grid{ display:grid; grid-template-columns: 1.15fr 0.85fr; gap:48px; align-items:center; }
+  @media (max-width: 860px){ .hero-grid{ grid-template-columns: 1fr; } }
+
+  h1{
+    font-family: var(--display); font-weight:700; font-size: clamp(32px, 4.6vw, 50px);
+    line-height:1.08; letter-spacing:-0.01em; margin-bottom:20px;
+  }
+  h1 span{ color: var(--amber); }
+
+  .hero p.lead{ color: var(--muted); font-size:16px; max-width: 46ch; margin-bottom:28px; }
+
+  .hero-meta{ font-family: var(--mono); font-size:13px; color: var(--muted); display:flex; gap:18px; flex-wrap:wrap; }
+  .hero-meta b{ color: var(--text); font-weight:500; }
+
+  .cta-row{ display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--mono); font-size:13px; padding:12px 20px; border-radius:6px;
+    border:1px solid var(--line); transition: all .18s ease;
+  }
+  .btn-primary{ background: var(--amber); color:#14171C; font-weight:600; border-color: var(--amber); }
+  .btn-primary:hover{ box-shadow: 0 0 0 3px rgba(255,176,32,0.18); transform: translateY(-1px); }
+  .btn-ghost{ color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--amber); color: var(--amber); }
+
+  /* ---------- GAUGE (signature element) ---------- */
+  .gauge-panel{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px 20px 16px;
+  }
+  .gauge-panel .cap{
+    font-family: var(--mono); font-size:11px; letter-spacing:0.1em; color: var(--muted);
+    text-transform:uppercase; text-align:center; margin-bottom:6px;
+  }
+  svg.dial{ width:100%; height:auto; display:block; }
+  .dial-label{ font-family: var(--mono); font-size:9px; fill: var(--muted); letter-spacing:0.03em; }
+  .dial-label.active{ fill: var(--amber); font-weight:600; }
+  .needle{
+    stroke: var(--amber); stroke-width:3; stroke-linecap:round;
+    transform-origin: 150px 150px;
+    transform: rotate(0deg);
+    animation: sweep 1.6s cubic-bezier(.2,.9,.25,1) forwards .3s;
+    filter: drop-shadow(0 0 4px rgba(255,176,32,0.6));
+  }
+  @keyframes sweep{ to{ transform: rotate(67.5deg); } }
+  .pivot{ fill: var(--text); }
+
+  .stat-row{ display:grid; grid-template-columns: repeat(3,1fr); border-top:1px solid var(--line); margin-top:14px; }
+  .stat{ text-align:center; padding:16px 6px; border-right:1px solid var(--line); }
+  .stat:last-child{ border-right:none; }
+  .stat .num{ font-family: var(--mono); font-size:26px; font-weight:600; color: var(--green); }
+  .stat .lbl{ font-family: var(--mono); font-size:10px; color: var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px; }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{ padding: 60px 0; border-top: 1px solid var(--line); }
+  .sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:34px; flex-wrap:wrap; gap:10px;}
+  .sec-head h2{ font-family: var(--display); font-size: clamp(22px,3vw,28px); font-weight:600; }
+  .sec-head .idx{ font-family: var(--mono); font-size:12px; color: var(--muted); }
+
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:18px; }
+  @media (max-width: 780px){ .proj-grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    display:block; background: var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:22px 22px 20px; transition: border-color .18s ease, transform .18s ease; cursor:pointer;
+  }
+  .card:hover{ border-color: var(--amber); transform: translateY(-2px); }
+  .card .demo-hint{
+    font-family: var(--mono); font-size:11px; color: var(--muted); margin-top:4px;
+    display:flex; align-items:center; gap:6px; transition: color .18s ease;
+  }
+  .card:hover .demo-hint{ color: var(--amber); }
+  .card .tag{
+    display:inline-block; font-family: var(--mono); font-size:10px; color: var(--amber);
+    border:1px solid var(--amber-dim); padding:3px 8px; border-radius:4px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .card h3{ font-family: var(--display); font-size:18px; font-weight:600; margin-bottom:8px; }
+  .card p{ color: var(--muted); font-size:14px; margin-bottom:14px; }
+  .stack{ display:flex; flex-wrap:wrap; gap:6px; }
+  .stack span{
+    font-family: var(--mono); font-size:10.5px; color: var(--text); background: var(--surface-2);
+    border:1px solid var(--line); padding:3px 8px; border-radius:4px;
+  }
+
+  /* ---------- DATA INSIGHTS / LOG ---------- */
+  .log{
+    background: var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .log-row{
+    display:grid; grid-template-columns: 90px 1fr; gap:0; border-bottom:1px solid var(--line);
+  }
+  .log-row:last-child{ border-bottom:none; }
+  .log-tag{
+    font-family: var(--mono); font-size:11px; color:#14171C; background: var(--amber);
+    display:flex; align-items:center; justify-content:center; font-weight:700; letter-spacing:0.04em;
+  }
+  .log-body{ padding:18px 20px; }
+  .log-body .problem{ font-size:14px; color: var(--text); margin-bottom:6px; }
+  .log-body .problem b{ color: var(--muted); font-weight:500; font-family: var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:4px; }
+  .log-body .solution{ font-family: var(--mono); font-size:13px; color: var(--green); }
+  .log-body .solution::before{ content: '→ '; color: var(--green); }
+
+  /* ---------- STACK ---------- */
+  .stack-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; }
+  @media (max-width: 780px){ .stack-grid{ grid-template-columns: repeat(2,1fr); } }
+  .stack-group h4{
+    font-family: var(--mono); font-size:11px; color: var(--amber); text-transform:uppercase;
+    letter-spacing:0.06em; margin-bottom:12px; border-bottom:1px dashed var(--line); padding-bottom:8px;
+  }
+  .stack-group ul{ list-style:none; }
+  .stack-group li{ font-size:13.5px; color: var(--muted); padding:4px 0; }
+  .stack-group li::before{ content:'▹ '; color: var(--green); }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding: 50px 0 60px; border-top:1px solid var(--line); }
+  footer .foot-grid{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; }
+  footer h3{ font-family: var(--display); font-size:22px; margin-bottom:10px; }
+  footer p{ color: var(--muted); font-size:14px; max-width: 40ch; }
+  .foot-links{ display:flex; gap:12px; flex-wrap:wrap; }
+  .foot-note{ font-family: var(--mono); font-size:11px; color: var(--muted); margin-top:36px; text-align:center; }
+
+  .reveal{ opacity:0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .needle{ animation:none; transform: rotate(67.5deg); }
+    .reveal{ transition:none; opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>WEVERTON ANDRÉ</div>
+    <div class="navlinks">
+      <a href="#experiencia">Experiência</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#insights">Como penso dados</a>
+      <a href="#stack">Stack</a>
+      <a href="#contato">Contato</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Painel de dados — Alto do Céu, João Pessoa, PB</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Transformo dados de<br>operação em <span>decisões visíveis.</span></h1>
+        <p class="lead">Analista financeiro e estudante de Ciência da Computação (FPB, 2022–2026), atuando entre análise de dados, automação de dashboards e desenvolvimento full-stack.</p>
+        <div class="hero-meta">
+          <span><b>Cargo atual</b> Analista Financeiro — Avelloz Motos</span>
+          <span><b>Stack</b> React · Node.js · Python · Power BI</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projetos">Ver projetos</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/weverton-andr%C3%A9-89077127a/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <div class="gauge-panel">
+        <div class="cap">Especialização</div>
+        <svg class="dial" viewBox="0 0 300 165" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50,150 A100,100 0 0 1 79.29,79.29" fill="none" stroke="#2C333E" stroke-width="10" stroke-linecap="round"/>
+          <path d="M79.29,79.29 A100,100 0 0 1 150,50" fill="none" stroke="#2C333E" stroke-width="10" stroke-linecap="round"/>
+          <path d="M150,50 A100,100 0 0 1 220.71,79.29" fill="none" stroke="#39424f" stroke-width="10" stroke-linecap="round"/>
+          <path d="M220.71,79.29 A100,100 0 0 1 250,150" fill="none" stroke="#FFB020" stroke-width="10" stroke-linecap="round"/>
+
+          <text x="30" y="112" class="dial-label" text-anchor="start">DOCS</text>
+          <text x="88" y="38" class="dial-label" text-anchor="middle">AUTOMAÇÃO</text>
+          <text x="212" y="38" class="dial-label" text-anchor="middle">DASHBOARDS</text>
+          <text x="268" y="112" class="dial-label active" text-anchor="end">DADOS</text>
+
+          <line class="needle" x1="150" y1="150" x2="150" y2="45"/>
+          <circle class="pivot" cx="150" cy="150" r="6"/>
+        </svg>
+        <div class="stat-row">
+          <div class="stat"><div class="num">04</div><div class="lbl">Projetos</div></div>
+          <div class="stat"><div class="num">03</div><div class="lbl">Setores</div></div>
+          <div class="stat"><div class="num">07+</div><div class="lbl">Tecnologias</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="experiencia">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Experiência profissional</h2>
+      <div class="idx">02 registros</div>
+    </div>
+    <div class="log">
+      <div class="log-row reveal">
+        <div class="log-tag">ATUAL</div>
+        <div class="log-body">
+          <div class="problem"><b>Analista Financeiro · Avelloz Motos · nov 2022 — atual</b>Responsável por análise de demonstrações financeiras, orçamentos, forecasts e fluxo de caixa da empresa.</div>
+          <div class="solution">Automatizou dashboards financeiros com Excel avançado e Power BI, e passou a integrar dados com TI para melhorar precisão e segurança das informações.</div>
+        </div>
+      </div>
+      <div class="log-row reveal">
+        <div class="log-tag">2022</div>
+        <div class="log-body">
+          <div class="problem"><b>Planejamento e Controle da Manutenção · Gráfica Santa Marta · jan–nov 2022</b>Gestão de recursos materiais e humanos para manutenção preventiva e corretiva de equipamentos gráficos.</div>
+          <div class="solution">Elaborou e acompanhou orçamento de manutenção, otimizando custos sem comprometer a disponibilidade dos equipamentos.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-row" style="margin-top:24px; border:1px solid var(--line); border-radius:12px; background:var(--surface);">
+      <div class="stat"><div class="num">FPB</div><div class="lbl">Ciência da Computação · 2022–2026</div></div>
+      <div class="stat"><div class="num">3+</div><div class="lbl">Anos em análise financeira</div></div>
+      <div class="stat"><div class="num">2</div><div class="lbl">Idiomas (ES / EN)</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projetos">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Projetos entregues</h2>
+      <div class="idx">04 registros</div>
+    </div>
+    <div class="proj-grid">
+
+      <div class="card reveal" onclick="location.href='projeto-paraiba-politica.html'" title="Ver case com telas reais do sistema">
+        <span class="tag">Full-stack</span>
+        <h3>Paraíba Política — Blog de Notícias</h3>
+        <p>Sistema completo de blog jornalístico com painel administrativo para usuários não-técnicos: criação, edição e exclusão de matérias com upload de imagem persistente e API REST própria.</p>
+        <div class="stack"><span>React</span><span>Vite</span><span>Node.js</span><span>Express</span><span>Multer</span><span>Cheerio</span></div>
+        <div class="demo-hint">Abrir demonstração ↗</div>
+      </div>
+
+      <div class="card reveal" onclick="location.href='projeto-az1-bikes.html'">
+        <span class="tag">Dashboards</span>
+        <h3>AZ1 Bikes — Painéis de Produção</h3>
+        <p>Relatórios e dashboards HTML/PDF interativos para a linha de montagem, com dados reais de produção mensal e exportação em A3 via automação de navegador.</p>
+        <div class="stack"><span>Chart.js</span><span>Playwright</span><span>HTML/CSS</span></div>
+        <div class="demo-hint">Abrir demonstração ↗</div>
+      </div>
+
+      <div class="card reveal" onclick="location.href='projeto-grupo-js.html'">
+        <span class="tag">Dashboards</span>
+        <h3>GRUPO JS — Dashboard Financeiro</h3>
+        <p>Módulo financeiro integrado a um sistema multi-seção para uma rede de concessionárias de motos, com responsividade mobile e identidade visual própria.</p>
+        <div class="stack"><span>HTML/CSS</span><span>JavaScript</span><span>Chart.js</span></div>
+        <div class="demo-hint">Abrir demonstração ↗</div>
+      </div>
+
+      <div class="card reveal" onclick="location.href='projeto-donalajp.html'">
+        <span class="tag">Full-stack · Dupla</span>
+        <h3>Gestão Sistemática Donalajp</h3>
+        <p>Sistema administrativo 100% local para óticas e pequenos negócios: financeiro, clientes, estoque e logística integrados, com geração automática de PDFs. Desenvolvido em dupla como projeto acadêmico.</p>
+        <div class="stack"><span>React.js</span><span>Tailwind</span><span>jsPDF</span><span>LocalStorage</span></div>
+        <div class="demo-hint">Abrir demonstração ↗</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="insights">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Como penso dados na prática</h2>
+      <div class="idx">log de decisões</div>
+    </div>
+    <div class="log">
+      <div class="log-row reveal">
+        <div class="log-tag">DADOS</div>
+        <div class="log-body">
+          <div class="problem"><b>Problema real</b>Nomes de montadores registrados de forma inconsistente no chão de fábrica (abreviações, apelidos, erros de digitação).</div>
+          <div class="solution">Padronização e normalização dos nomes antes de qualquer geração de relatório, evitando métricas de produtividade erradas.</div>
+        </div>
+      </div>
+      <div class="log-row reveal">
+        <div class="log-tag">DADOS</div>
+        <div class="log-body">
+          <div class="problem"><b>Problema real</b>Datas malformadas na base de produção quebrando os gráficos temporais do dashboard.</div>
+          <div class="solution">Validação e parsing de datas como primeira etapa do pipeline, antes de qualquer visualização.</div>
+        </div>
+      </div>
+      <div class="log-row reveal">
+        <div class="log-tag">DADOS</div>
+        <div class="log-body">
+          <div class="problem"><b>Problema real</b>Contas de login compartilhadas entre operadores, distorcendo a atribuição individual de tarefas.</div>
+          <div class="solution">Cruzamento por padrão de uso e turno para reconstruir a atribuição real de cada operador.</div>
+        </div>
+      </div>
+      <div class="log-row reveal">
+        <div class="log-tag">INFRA</div>
+        <div class="log-body">
+          <div class="problem"><b>Problema real</b>Dashboard dependente de CDN externa falhando ao renderizar gráficos fora de conexões estáveis.</div>
+          <div class="solution">Biblioteca de gráficos embutida diretamente no HTML, eliminando a dependência externa no momento da entrega.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Stack no dia a dia</h2>
+      <div class="idx">4 grupos</div>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-group">
+        <h4>Frontend</h4>
+        <ul><li>React + Vite</li><li>Tailwind CSS</li><li>Styled-components</li><li>JavaScript ES6+</li></ul>
+      </div>
+      <div class="stack-group">
+        <h4>Backend</h4>
+        <ul><li>Node.js + Express</li><li>Multer (upload)</li><li>Cheerio</li><li>LocalStorage API</li></ul>
+      </div>
+      <div class="stack-group">
+        <h4>Dados &amp; Análise</h4>
+        <ul><li>Python / Java / C++</li><li>Power BI</li><li>Excel avançado</li><li>Chart.js</li></ul>
+      </div>
+      <div class="stack-group">
+        <h4>Documentos &amp; Ferramentas</h4>
+        <ul><li>jsPDF · AutoTable</li><li>ReportLab · WeasyPrint</li><li>Playwright (PDF)</li><li>Git</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contato">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h3>Vamos conversar?</h3>
+        <p>Aberto a oportunidades em análise de dados, BI ou desenvolvimento full-stack. Alto do Céu, João Pessoa — PB, Brasil.</p>
+        <p style="margin-top:10px; font-family: var(--mono); font-size:13px; color: var(--text);">xpwpandre@gmail.com · (83) 99847-2014</p>
+      </div>
+      <div class="foot-links">
+        <a class="btn btn-primary" href="mailto:xpwpandre@gmail.com">Enviar e-mail</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/weverton-andr%C3%A9-89077127a/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="foot-note">WEVERTON ANDRÉ BURIL DOS SANTOS · JOÃO PESSOA, PB · 2026</div>
+  </div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  els.forEach(el=> io.observe(el));
+</script>
+
+</body>
+</html>
