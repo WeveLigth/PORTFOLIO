@@ -181,7 +181,7 @@
     text-transform:uppercase; text-align:center; margin-bottom:6px;
   }
   svg.dial{ width:100%; height:auto; display:block; }
-  .dial-label{ font-family: var(--mono); font-size:9px; fill: var(--muted); letter-spacing:0.03em; }
+  .dial-label{ font-family: var(--mono); font-size:9px; fill: var(--muted); letter-spacing:0.03em; paint-order: stroke; stroke: rgba(20,23,28,0.9); stroke-width: 2px; stroke-linejoin: round; }
   .dial-label.active{ fill: var(--amber); font-weight:600; }
   .needle{
     stroke: var(--amber); stroke-width:3; stroke-linecap:round;
@@ -490,10 +490,10 @@
           <path d="M150,50 A100,100 0 0 1 220.71,79.29" fill="none" stroke="#39424f" stroke-width="10" stroke-linecap="round"/>
           <path d="M220.71,79.29 A100,100 0 0 1 250,150" fill="none" stroke="#FFB020" stroke-width="10" stroke-linecap="round"/>
 
-          <text x="30" y="112" class="dial-label" text-anchor="start">DOCS</text>
-          <text x="88" y="38" class="dial-label" text-anchor="middle">AUTOMAÇÃO</text>
-          <text x="212" y="38" class="dial-label" text-anchor="middle">DASHBOARDS</text>
-          <text x="268" y="112" class="dial-label active" text-anchor="end">DADOS</text>
+          <text x="30" y="126" class="dial-label" text-anchor="start">DOCS</text>
+          <text x="88" y="24" class="dial-label" text-anchor="middle">AUTOMAÇÃO</text>
+          <text x="212" y="24" class="dial-label" text-anchor="middle">DASHBOARDS</text>
+          <text x="268" y="126" class="dial-label active" text-anchor="end">DADOS</text>
 
           <line class="needle" x1="150" y1="150" x2="150" y2="45"/>
           <circle class="pivot" cx="150" cy="150" r="6"/>

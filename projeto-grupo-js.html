@@ -8,26 +8,26 @@
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
   :root{
-    --bg-0:#eef1f6;
-    --bg-1:#ffffff;
-    --bg-2:#ffffff;
-    --bg-3:#f3f5f9;
-    --line:#e1e5ec;
-    --gold:#a8730a;
-    --gold-soft:#c99019;
-    --blue:#2f6fed;
-    --blue-soft:#1d55d6;
-    --green:#15a355;
-    --red:#dc2626;
-    --text-0:#10151f;
-    --text-1:#525c6b;
-    --text-2:#7b8494;
+    --bg-0:#14171C;
+    --bg-1:#1B2027;
+    --bg-2:#212832;
+    --bg-3:#2A3340;
+    --line:#2C333E;
+    --gold:#FFB020;
+    --gold-soft:#FFBE46;
+    --blue:#4DA3FF;
+    --blue-soft:#78B8FF;
+    --green:#4ADE80;
+    --red:#F2545B;
+    --text-0:#EDEFF2;
+    --text-1:#D6DCE5;
+    --text-2:#8B94A3;
     --radius:10px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{overflow-x:hidden;}
   body{
-    background:radial-gradient(ellipse at top, #ffffff 0%, var(--bg-0) 60%);
+    background:radial-gradient(ellipse at top, rgba(255,176,32,0.08), transparent 35%), var(--bg-0);
     color:var(--text-0);
     font-family:'Inter',sans-serif;
     min-height:100vh;
@@ -42,7 +42,7 @@
   .back-link{
     display:inline-flex; align-items:center; gap:8px;
     padding:10px 14px; margin:4px 0 12px; border-radius:10px;
-    text-decoration:none; color:var(--text-1); background:var(--bg-1);
+    text-decoration:none; color:var(--text-1); background:rgba(27,32,39,0.9);
     border:1px solid var(--line); font-size:13px; font-weight:600;
     transition:all .15s ease;
   }
@@ -60,7 +60,7 @@
     text-transform:uppercase; color:#1a1206; border:none; border-radius:10px;
     padding:11px 20px; cursor:pointer; white-space:nowrap;
     background:linear-gradient(135deg,var(--gold-soft),var(--gold));
-    box-shadow:0 2px 8px rgba(168,115,10,.25);
+    box-shadow:0 2px 8px rgba(255,176,32,.25);
   }
   .btn-salvar:hover{filter:brightness(1.06);}
   .btn-salvar:active{filter:brightness(0.95);}
